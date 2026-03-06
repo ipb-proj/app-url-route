@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opening Lecture...</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .btn {
+            display: none; /* Hidden until the script decides to show it */
+            margin-top: 20px;
+            padding: 12px 24px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 id="message">Opening lecture in the app...</h2>
+    <a id="fallback-link" class="btn" href="#">Open App Manually</a>
+
+    <script>
+        window.onload = function() {
+            // 1. Get the query parameters from the HTTPS URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const lectureId = urlParams.get('id');
+
+            const messageEl = document.getElementById('message');
+            const fallbackLink = document.getElementById('fallback-link');
+
+            if (lectureId) {
+                // 2. Construct your custom app URI
+                const appUrl = "prabhupadavani://lecture?id=" + lectureId;
+                
+                // 3. Set the fallback button to use this custom URI
+                fallbackLink.href = appUrl;
+
+                // 4. Attempt to redirect the user to the app automatically
+                window.location.replace(appUrl);
+
+                // 5. Fallback logic: If the app doesn't open (e.g., app not installed or browser blocks auto-redirect)
+                setTimeout(function() {
+                    messageEl.innerText = "If the app didn't open automatically, tap the button below.";
+                    fallbackLink.style.display = 'inline-block';
+                    
+                    // Optional: You could also add a second button here pointing to the App Store / Play Store
+                }, 2000); // Waits 2 seconds before showing the fallback button
+                
+            } else {
+                messageEl.innerText = "Invalid lecture link. No ID provided.";
+            }
+        };
+    </script>
+</body>
+</html>
